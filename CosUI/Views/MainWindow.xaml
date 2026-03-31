@@ -1,0 +1,124 @@
+<Window x:Class="CosUI.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="clr-namespace:CosUI.Controls"
+        Title="Cosmic" Width="1100" Height="720"
+        WindowStyle="None" AllowsTransparency="True" ResizeMode="CanResize"
+        Background="Transparent"
+        WindowStartupLocation="CenterScreen"
+        Deactivated="Window_Deactivated"
+        Closing="Window_Closing">
+
+    <Border x:Name="RootBorder"
+            Background="{DynamicResource BackgroundBrush}"
+            BorderBrush="{DynamicResource BorderSubtleBrush}"
+            BorderThickness="1"
+            CornerRadius="10">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="36"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="48"/>
+            </Grid.RowDefinitions>
+
+            <!-- Title bar -->
+            <Border Grid.Row="0"
+                    Background="{DynamicResource SidebarBgBrush}"
+                    CornerRadius="10,10,0,0"
+                    MouseLeftButtonDown="TitleBar_MouseDown">
+                <Grid Margin="18,0">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <Ellipse Width="9" Height="9" Fill="{DynamicResource PrimaryBlueBrush}">
+                            <Ellipse.Effect>
+                                <DropShadowEffect Color="{DynamicResource GlowLogo}"
+                                                  BlurRadius="12" ShadowDepth="0" Opacity="0.8"/>
+                            </Ellipse.Effect>
+                        </Ellipse>
+                        <TextBlock Text="COSMIC" FontSize="11" FontWeight="Bold"
+                                   Foreground="{DynamicResource TextSecondaryBrush}"
+                                   Margin="10,0,0,0"/>
+                        <TextBlock x:Name="FileNameLabel" FontSize="11"
+                                   Foreground="{DynamicResource TextMutedBrush}"
+                                   Margin="12,0,0,0"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"
+                                VerticalAlignment="Center">
+                        <Ellipse Width="11" Height="11" Fill="{DynamicResource WinCloseBrush}" Cursor="Hand"
+                                 MouseLeftButtonDown="WinClose_Click" Margin="0,0,6,0"/>
+                        <Ellipse Width="11" Height="11" Fill="{DynamicResource WinMinimizeBrush}" Cursor="Hand"
+                                 MouseLeftButtonDown="WinMinimize_Click" Margin="0,0,6,0"/>
+                        <Ellipse Width="11" Height="11" Fill="{DynamicResource WinMaximizeBrush}" Cursor="Hand"
+                                 MouseLeftButtonDown="WinMaximize_Click"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="200"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Border Grid.Column="0"
+                        BorderBrush="{DynamicResource BorderSubtleBrush}"
+                        BorderThickness="0,0,1,0">
+                    <controls:FileSidebar x:Name="Sidebar" ViewModel="{Binding}"/>
+                </Border>
+
+                <Grid Grid.Column="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="5"/>
+                        <RowDefinition Height="140" MinHeight="80"/>
+                    </Grid.RowDefinitions>
+
+                    <controls:MonacoEditor Grid.Row="0" x:Name="Editor"
+                                           EditorReady="Editor_Ready"/>
+
+                    <GridSplitter Grid.Row="1" Height="5"
+                                  HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                                  Background="{DynamicResource BorderSubtleBrush}"
+                                  ResizeDirection="Rows"/>
+
+                    <controls:ConsolePanel Grid.Row="2" x:Name="ConsoleView"
+                                           Entries="{Binding ConsoleEntries}"/>
+                </Grid>
+            </Grid>
+
+            <!-- Footer -->
+            <Border Grid.Row="2"
+                    Background="{DynamicResource SidebarBgBrush}"
+                    BorderBrush="{DynamicResource BorderSubtleBrush}"
+                    BorderThickness="0,1,0,0"
+                    CornerRadius="0,0,10,10">
+                <DockPanel Margin="20,0">
+                    <StackPanel DockPanel.Dock="Left" Orientation="Horizontal" VerticalAlignment="Center">
+                        <Button Content="Execute"
+                                Style="{StaticResource PrimaryBtnStyle}"
+                                Click="Execute_Click" Margin="0,0,8,0"/>
+                        <Button x:Name="BtnAttach" Content="Attach"
+                                Style="{StaticResource SecondaryBtnStyle}"
+                                Click="Attach_Click" Margin="0,0,8,0"/>
+                        <Button Content="Clear"
+                                Style="{StaticResource GhostBtnStyle}"
+                                Click="Clear_Click"/>
+                    </StackPanel>
+                    <StackPanel DockPanel.Dock="Right" Orientation="Horizontal"
+                                VerticalAlignment="Center" HorizontalAlignment="Right">
+                        <TextBlock x:Name="StatusLabel" FontSize="11"
+                                   Foreground="{DynamicResource TextMutedBrush}"
+                                   VerticalAlignment="Center" Margin="0,0,10,0"/>
+                        <controls:StatusDot x:Name="ClientDot" IsActive="False" Margin="0,0,12,0"/>
+                        <Border Width="28" Height="28" CornerRadius="6" Cursor="Hand"
+                                Background="Transparent"
+                                MouseLeftButtonDown="Settings_Click">
+                            <TextBlock Text="⚙" FontSize="13"
+                                       Foreground="{DynamicResource TextMutedBrush}"
+                                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </StackPanel>
+                </DockPanel>
+            </Border>
+        </Grid>
+    </Border>
+</Window>

@@ -1,0 +1,68 @@
+<UserControl x:Class="CosUI.Controls.FileTabBar"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Border Background="{StaticResource SidebarBgBrush}"
+            BorderBrush="{StaticResource BorderSubtleBrush}"
+            BorderThickness="0,0,0,1">
+        <DockPanel>
+            <Button DockPanel.Dock="Right" Content="+"
+                    Background="Transparent" BorderThickness="0"
+                    Foreground="{StaticResource TextMutedBrush}"
+                    FontSize="16" Width="40" Cursor="Hand"
+                    Click="NewFile_Click"/>
+            <ListBox x:Name="TabList"
+                     Background="Transparent" BorderThickness="0"
+                     ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                     ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                     SelectionChanged="TabList_SelectionChanged">
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem">
+                        <Setter Property="Padding" Value="0"/>
+                        <Setter Property="Margin" Value="0"/>
+                        <Setter Property="Background" Value="Transparent"/>
+                        <Setter Property="BorderThickness" Value="0"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ListBoxItem">
+                                    <Border x:Name="Bd"
+                                            Background="{TemplateBinding Background}"
+                                            Padding="16,0,12,0" MinWidth="90">
+                                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                            <TextBlock x:Name="DirtyDot" Text="&#x25CF;" FontSize="7"
+                                                       Foreground="{StaticResource AccentBlueBrush}"
+                                                       VerticalAlignment="Center"
+                                                       Margin="0,0,5,0"
+                                                       Visibility="{Binding IsDirty, Converter={StaticResource BoolToVis}}"/>
+                                            <TextBlock Text="{Binding Name}" FontSize="12"
+                                                       Foreground="{StaticResource TextSecondaryBrush}"
+                                                       VerticalAlignment="Center"/>
+                                            <Button x:Name="CloseBtn" Content="&#x2715;" FontSize="8"
+                                                    Background="Transparent" BorderThickness="0"
+                                                    Foreground="{StaticResource TextMutedBrush}"
+                                                    Padding="6,2,0,2" Cursor="Hand"
+                                                    Click="CloseTab_Click"
+                                                    Tag="{TemplateBinding DataContext}"/>
+                                        </StackPanel>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsSelected" Value="True">
+                                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource SurfaceBrush}"/>
+                                        </Trigger>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource SurfaceBrush}"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ListBox.ItemContainerStyle>
+            </ListBox>
+        </DockPanel>
+    </Border>
+</UserControl>

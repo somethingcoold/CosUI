@@ -1,0 +1,246 @@
+<Window x:Class="CosUI.Views.WelcomeWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="clr-namespace:CosUI.Controls"
+        Title="Cosmic" Width="880" Height="560"
+        WindowStyle="None" AllowsTransparency="True" ResizeMode="NoResize"
+        Background="Transparent"
+        WindowStartupLocation="CenterScreen">
+
+    <Border Background="{StaticResource BackgroundBrush}"
+            BorderBrush="{StaticResource BorderSubtleBrush}"
+            BorderThickness="1"
+            CornerRadius="10">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="36"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- Title bar -->
+            <Border Grid.Row="0" Background="{StaticResource SidebarBgBrush}"
+                    CornerRadius="10,10,0,0"
+                    MouseLeftButtonDown="TitleBar_MouseDown">
+                <Grid Margin="18,0">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <Ellipse Width="9" Height="9" Fill="{StaticResource PrimaryBlueBrush}">
+                            <Ellipse.Effect>
+                                <DropShadowEffect Color="{StaticResource GlowLogo}" BlurRadius="12" ShadowDepth="0" Opacity="0.8"/>
+                            </Ellipse.Effect>
+                        </Ellipse>
+                        <TextBlock Text="COSMIC" FontSize="11" FontWeight="Bold"
+                                   Foreground="{StaticResource TextSecondaryBrush}"
+                                   Margin="10,0,0,0"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"
+                                VerticalAlignment="Center">
+                        <Ellipse Width="11" Height="11" Fill="{StaticResource WinCloseBrush}"/>
+                        <Ellipse Width="11" Height="11" Fill="{StaticResource WinMinimizeBrush}" Margin="7,0,0,0"/>
+                        <Ellipse Width="11" Height="11" Fill="{StaticResource WinMaximizeBrush}" Margin="7,0,0,0"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- Body -->
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="260"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Left panel -->
+                <Border Grid.Column="0"
+                        Background="{StaticResource SidebarBgBrush}"
+                        BorderBrush="{StaticResource BorderSubtleBrush}"
+                        BorderThickness="0,0,1,0">
+                    <Grid Margin="36,52,36,40">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- Brand block -->
+                        <StackPanel Grid.Row="0" Margin="0,0,0,52">
+                            <TextBlock Text="COSMIC" FontSize="30" FontWeight="ExtraBold"
+                                       Foreground="{StaticResource PrimaryBlueBrush}"
+                                       Margin="0,0,0,8"/>
+                            <TextBlock Text="Luau Executor" FontSize="11"
+                                       Foreground="{StaticResource TextMutedBrush}"/>
+                        </StackPanel>
+
+                        <!-- Status info -->
+                        <StackPanel Grid.Row="1" VerticalAlignment="Top">
+                            <!-- Status section -->
+                            <StackPanel Margin="0,0,0,20">
+                                <TextBlock Text="STATUS" FontSize="9" FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextMutedBrush}"
+                                           Margin="0,0,0,10"/>
+                                <Grid Margin="0,0,0,10">
+                                    <TextBlock Text="WebSocket" FontSize="12"
+                                               Foreground="{StaticResource TextSecondaryBrush}"/>
+                                    <Border HorizontalAlignment="Right"
+                                            Background="{StaticResource BorderSubtleBrush}"
+                                            CornerRadius="20" Padding="9,2">
+                                        <TextBlock x:Name="WsStatusBadge" FontSize="10" FontWeight="SemiBold"
+                                                   Foreground="{StaticResource PrimaryBlueBrush}"/>
+                                    </Border>
+                                </Grid>
+                                <Grid>
+                                    <TextBlock Text="Roblox" FontSize="12"
+                                               Foreground="{StaticResource TextSecondaryBrush}"/>
+                                    <Border HorizontalAlignment="Right"
+                                            Background="{StaticResource BorderSubtleBrush}"
+                                            CornerRadius="20" Padding="9,2">
+                                        <TextBlock x:Name="RobloxStatusBadge" FontSize="10" FontWeight="SemiBold"
+                                                   Foreground="{StaticResource TextMutedBrush}"/>
+                                    </Border>
+                                </Grid>
+                            </StackPanel>
+
+                            <!-- Session section -->
+                            <StackPanel>
+                                <TextBlock Text="SESSION" FontSize="9" FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextMutedBrush}"
+                                           Margin="0,0,0,10"/>
+                                <Grid Margin="0,0,0,10">
+                                    <TextBlock Text="Open scripts" FontSize="12"
+                                               Foreground="{StaticResource TextSecondaryBrush}"/>
+                                    <TextBlock x:Name="OpenScriptCountText" HorizontalAlignment="Right"
+                                               FontSize="12"
+                                               Foreground="{StaticResource TextSecondaryBrush}"/>
+                                </Grid>
+                                <Grid>
+                                    <TextBlock Text="Auto-exec" FontSize="12"
+                                               Foreground="{StaticResource TextSecondaryBrush}"/>
+                                    <Border HorizontalAlignment="Right"
+                                            Background="{StaticResource BorderSubtleBrush}"
+                                            CornerRadius="20" Padding="9,2">
+                                        <TextBlock x:Name="AutoExecBadge" FontSize="10" FontWeight="SemiBold"
+                                                   Foreground="{StaticResource TextMutedBrush}"/>
+                                    </Border>
+                                </Grid>
+                            </StackPanel>
+                        </StackPanel>
+
+                        <!-- Version + status dot -->
+                        <StackPanel Grid.Row="2" Orientation="Horizontal"
+                                    VerticalAlignment="Bottom">
+                            <controls:StatusDot x:Name="LiveDot" IsActive="False"/>
+                            <TextBlock Text="v1.0.0" FontSize="10"
+                                       Foreground="{StaticResource TextMutedBrush}"
+                                       Margin="8,0,0,0"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <!-- Right panel -->
+                <Grid Grid.Column="1" Margin="52,52,52,40">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Greeting -->
+                    <StackPanel Grid.Row="0">
+                        <TextBlock Text="Welcome back" FontSize="26" FontWeight="Bold"
+                                   Foreground="{StaticResource TextPrimaryBrush}" Margin="0,0,0,6"/>
+                        <TextBlock Text="Choose an action or open a recent script"
+                                   FontSize="13"
+                                   Foreground="{StaticResource TextSecondaryBrush}"/>
+                    </StackPanel>
+
+                    <!-- Quick Actions label -->
+                    <TextBlock Grid.Row="2" Text="QUICK ACTIONS" FontSize="9" FontWeight="SemiBold"
+                               Foreground="{StaticResource TextMutedBrush}"
+                               Margin="0,0,0,14"/>
+
+                    <!-- Actions grid -->
+                    <UniformGrid Grid.Row="3" Rows="2" Columns="2" Margin="0,0,0,0">
+                        <Border x:Name="CardContinue" Style="{StaticResource ActionCardStyle}"
+                                Margin="0,0,5,5"
+                                MouseLeftButtonDown="Continue_Click">
+                            <StackPanel>
+                                <TextBlock Text="Continue Session" FontSize="13" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AccentBlueBrush}" Margin="0,0,0,4"/>
+                                <TextBlock Text="Resume where you left off" FontSize="11"
+                                           Foreground="{StaticResource TextSecondaryBrush}"/>
+                            </StackPanel>
+                        </Border>
+                        <Border Style="{StaticResource ActionCardStyle}" Margin="5,0,0,5"
+                                MouseLeftButtonDown="NewScript_Click">
+                            <StackPanel>
+                                <TextBlock Text="New Script" FontSize="13" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AccentBlueBrush}" Margin="0,0,0,4"/>
+                                <TextBlock Text="Open a blank .luau file" FontSize="11"
+                                           Foreground="{StaticResource TextSecondaryBrush}"/>
+                            </StackPanel>
+                        </Border>
+                        <Border Style="{StaticResource ActionCardStyle}" Margin="0,5,5,0"
+                                MouseLeftButtonDown="OpenFile_Click">
+                            <StackPanel>
+                                <TextBlock Text="Open File" FontSize="13" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AccentBlueBrush}" Margin="0,0,0,4"/>
+                                <TextBlock Text="Browse and import a script" FontSize="11"
+                                           Foreground="{StaticResource TextSecondaryBrush}"/>
+                            </StackPanel>
+                        </Border>
+                        <Border Style="{StaticResource ActionCardStyle}" Margin="5,5,0,0"
+                                MouseLeftButtonDown="Settings_Click">
+                            <StackPanel>
+                                <TextBlock Text="Settings" FontSize="13" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AccentBlueBrush}" Margin="0,0,0,4"/>
+                                <TextBlock Text="FPS, auto-exec, console" FontSize="11"
+                                           Foreground="{StaticResource TextSecondaryBrush}"/>
+                            </StackPanel>
+                        </Border>
+                    </UniformGrid>
+
+                    <!-- Recent Scripts -->
+                    <Grid Grid.Row="4" VerticalAlignment="Top">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Grid Grid.Row="0" Margin="0,32,0,12">
+                            <TextBlock Text="RECENT SCRIPTS" FontSize="9" FontWeight="SemiBold"
+                                       Foreground="{StaticResource TextMutedBrush}"/>
+                            <TextBlock x:Name="ClearHistoryLink" Text="Clear history"
+                                       HorizontalAlignment="Right" FontSize="11"
+                                       Foreground="{StaticResource TextMutedBrush}"
+                                       Cursor="Hand"
+                                       MouseLeftButtonDown="ClearHistory_Click"/>
+                        </Grid>
+                        <ItemsControl x:Name="RecentList" Grid.Row="1"
+                                      ItemsSource="{Binding RecentFiles}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Style="{StaticResource RecentItemStyle}"
+                                            Margin="0,0,0,6"
+                                            Tag="{Binding}"
+                                            MouseLeftButtonDown="RecentItem_Click">
+                                        <Grid>
+                                            <StackPanel>
+                                                <TextBlock Text="{Binding Name}" FontSize="12" FontWeight="Medium"
+                                                           Foreground="{StaticResource AccentBlueBrush}"/>
+                                                <TextBlock Text="{Binding Directory}" FontSize="10"
+                                                           Foreground="{StaticResource TextMutedBrush}"
+                                                           Margin="0,3,0,0"/>
+                                            </StackPanel>
+                                            <TextBlock Text="&#x2192;" HorizontalAlignment="Right"
+                                                       VerticalAlignment="Center" FontSize="12"
+                                                       Foreground="{StaticResource TextMutedBrush}"/>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </Grid>
+                </Grid>
+            </Grid>
+        </Grid>
+    </Border>
+</Window>

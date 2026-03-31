@@ -1,0 +1,61 @@
+<UserControl x:Class="CosUI.Controls.ConsolePanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:conv="clr-namespace:CosUI.Converters">
+    <UserControl.Resources>
+        <conv:StatusToBrushConverter x:Key="StatusBrush"/>
+    </UserControl.Resources>
+
+    <Grid Background="{DynamicResource SidebarBgBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="34"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0"
+                Background="{DynamicResource SidebarBgBrush}"
+                BorderBrush="{DynamicResource BorderSubtleBrush}"
+                BorderThickness="0,0,0,1">
+            <TextBlock Text="Console" FontSize="11" FontWeight="SemiBold"
+                       Foreground="{DynamicResource TextSecondaryBrush}"
+                       VerticalAlignment="Center" Margin="16,0"/>
+        </Border>
+
+        <ListBox x:Name="ConsoleList" Grid.Row="1"
+                 Background="{DynamicResource SidebarBgBrush}"
+                 BorderThickness="0"
+                 Padding="0,4"
+                 FontFamily="Cascadia Code, Consolas, Courier New"
+                 FontSize="11"
+                 HorizontalContentAlignment="Stretch"
+                 ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                 ScrollViewer.VerticalScrollBarVisibility="Auto"
+                 VirtualizingPanel.IsVirtualizing="True"
+                 VirtualizingPanel.VirtualizationMode="Recycling">
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                    <Setter Property="Padding" Value="0"/>
+                    <Setter Property="Margin" Value="0"/>
+                    <Setter Property="Background" Value="Transparent"/>
+                    <Setter Property="BorderThickness" Value="0"/>
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                    <Style.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Background" Value="{DynamicResource SurfaceBrush}"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </ListBox.ItemContainerStyle>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Msg}"
+                               Foreground="{Binding Status, Converter={StaticResource StatusBrush}}"
+                               Padding="16,1"
+                               FontFamily="Cascadia Code, Consolas, Courier New"
+                               FontSize="11"
+                               TextWrapping="NoWrap"/>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </Grid>
+</UserControl>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body, #editor { width: 100%; height: 100%; overflow: hidden; }
+  body { background: #07070f; }
+</style>
+</head>
+<body>
+<div id="editor"></div>
+<script>
+var require = { paths: { vs: 'https://cdn.jsdelivr.net/npm/monaco-editor@0.47.0/min/vs' } };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.47.0/min/vs/loader.js"></script>
+<script>
+require(['vs/editor/editor.main'], function() {
+  var editor = monaco.editor.create(document.getElementById('editor'), {
+    value: '',
+    language: 'lua',
+    theme: 'vs-dark',
+    fontSize: 13,
+    lineHeight: 23,
+    fontFamily: 'Cascadia Code, Consolas, monospace',
+    minimap: { enabled: false },
+    scrollBeyondLastLine: false,
+    automaticLayout: true,
+    wordWrap: 'off',
+    renderLineHighlight: 'none',
+    lineNumbers: 'on',
+    scrollbar: { verticalScrollbarSize: 6, horizontalScrollbarSize: 6 }
+  });
+
+  window.chrome.webview.postMessage(JSON.stringify({ type: 'editorReady' }));
+
+  window.chrome.webview.addEventListener('message', function(e) {
+    var msg = JSON.parse(e.data);
+    switch (msg.type) {
+      case 'setContent':
+        editor.setValue(msg.content || '');
+        break;
+      case 'getContent':
+        window.chrome.webview.postMessage(JSON.stringify({
+          type: 'contentResult',
+          requestId: msg.requestId,
+          content: editor.getValue()
+        }));
+        break;
+      case 'setScroll':
+        editor.revealLineInCenter(msg.line || 1);
+        break;
+      case 'getScroll':
+        window.chrome.webview.postMessage(JSON.stringify({
+          type: 'scrollResult',
+          requestId: msg.requestId,
+          line: editor.getVisibleRanges()[0] ? editor.getVisibleRanges()[0].startLineNumber : 1
+        }));
+        break;
+      case 'setTheme':
+        applyTheme(msg.theme);
+        break;
+    }
+  });
+
+  function applyTheme(t) {
+    if (!t) return;
+    monaco.editor.defineTheme('cosui', {
+      base: 'vs-dark',
+      inherit: true,
+      rules: [],
+      colors: {
+        'editor.background': t.background || '#07070f',
+        'editor.foreground': t.foreground || '#d0e0ff',
+        'editorLineNumber.foreground': t.lineNumbers || '#1a2a55',
+        'editor.lineHighlightBackground': t.lineHighlight || '#09091a',
+        'editorCursor.foreground': t.cursor || '#1a66ff'
+      }
+    });
+    monaco.editor.setTheme('cosui');
+  }
+});
+</script>
+</body>
+</html>
